@@ -294,6 +294,7 @@ public:
     Q_PROPERTY(Fact* climbRate          READ climbRate          CONSTANT)
     Q_PROPERTY(Fact* altitudeRelative   READ altitudeRelative   CONSTANT)
     Q_PROPERTY(Fact* altitudeAMSL       READ altitudeAMSL       CONSTANT)
+    Q_PROPERTY(Fact* altitudeAboveTerr  READ altitudeAboveTerr  CONSTANT)
     Q_PROPERTY(Fact* altitudeTuning     READ altitudeTuning     CONSTANT)
     Q_PROPERTY(Fact* altitudeTuningSetpoint READ altitudeTuningSetpoint CONSTANT)
     Q_PROPERTY(Fact* xTrackError        READ xTrackError        CONSTANT)
@@ -687,6 +688,7 @@ public:
     Fact* climbRate                         () { return &_climbRateFact; }
     Fact* altitudeRelative                  () { return &_altitudeRelativeFact; }
     Fact* altitudeAMSL                      () { return &_altitudeAMSLFact; }
+    Fact* altitudeAboveTerr                 () { return &_altitudeAboveTerrFact; }
     Fact* altitudeTuning                    () { return &_altitudeTuningFact; }
     Fact* altitudeTuningSetpoint            () { return &_altitudeTuningSetpointFact; }
     Fact* xTrackError                       () { return &_xTrackErrorFact; }
@@ -1032,6 +1034,8 @@ private slots:
     void _orbitTelemetryTimeout             ();
     void _updateFlightTime                  ();
     void _gotProgressUpdate                 (float progressValue);
+    void _updateAltAboveTerrain             ();
+    void _altitudeAboveTerrainReceived      (bool sucess, QList<double> heights);
 
 private:
     void _loadJoystickSettings          ();
@@ -1364,6 +1368,7 @@ private:
     Fact _climbRateFact;
     Fact _altitudeRelativeFact;
     Fact _altitudeAMSLFact;
+    Fact _altitudeAboveTerrFact;
     Fact _altitudeTuningFact;
     Fact _altitudeTuningSetpointFact;
     Fact _xTrackErrorFact;
@@ -1420,6 +1425,7 @@ private:
     static const char* _climbRateFactName;
     static const char* _altitudeRelativeFactName;
     static const char* _altitudeAMSLFactName;
+    static const char* _altitudeAboveTerrFactName;
     static const char* _altitudeTuningFactName;
     static const char* _altitudeTuningSetpointFactName;
     static const char* _xTrackErrorFactName;
@@ -1460,6 +1466,10 @@ private:
     // Terrain query members, used to get terrain altitude for doSetHome()
     TerrainAtCoordinateQuery*   _currentDoSetHomeTerrainAtCoordinateQuery = nullptr;
     QGeoCoordinate              _doSetHomeCoordinate;
+
+    // Terrain query members, used to get altitude above terrain Fact
+    QElapsedTimer               _altitudeAboveTerrQueryTimer;
+    TerrainAtCoordinateQuery*   _altitudeAboveTerrTerrainAtCoordinateQuery = nullptr;
 };
 
 Q_DECLARE_METATYPE(Vehicle::MavCmdResultFailureCode_t)
