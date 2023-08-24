@@ -1034,6 +1034,7 @@ private slots:
     void _orbitTelemetryTimeout             ();
     void _updateFlightTime                  ();
     void _gotProgressUpdate                 (float progressValue);
+    void _doSetHomeTerrainReceived          (bool success, QList<double> heights);
     void _updateAltAboveTerrain             ();
     void _altitudeAboveTerrainReceived      (bool sucess, QList<double> heights);
 
@@ -1097,9 +1098,6 @@ private:
     EventHandler& _eventHandler         (uint8_t compid);
 
     static void _rebootCommandResultHandler(void* resultHandlerData, int compId, MAV_RESULT commandResult, uint8_t progress, MavCmdResultFailureCode_t failureCode);
-
-    // This is called after we get terrain data triggered from a doSetHome()
-    void _doSetHomeTerrainReceived      (bool success, QList<double> heights);
 
     int     _id;                    ///< Mavlink system id
     int     _defaultComponentId;
